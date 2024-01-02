@@ -61,6 +61,7 @@ class _Expenses extends State<Expenses> {
 
   void openAddOverlay() {
     showModalBottomSheet(
+      useSafeArea: true,
       isScrollControlled: true,
       //backgroundColor: Colors.white,
       context: context,
@@ -79,6 +80,8 @@ class _Expenses extends State<Expenses> {
       mainContent = ExpenseList(
           expenses: registeredExpenses, removeExpense: removeExpense);
     }
+
+    final width = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
         title: const Text('Expenses App'),
@@ -91,12 +94,17 @@ class _Expenses extends State<Expenses> {
           ),
         ],
       ),
-      body: Column(
-        children: [
-          Chart(expenses: registeredExpenses),
-          Expanded(child: mainContent),
-        ],
-      ),
+      body: width >= 600
+          ? Row(children: [
+              Expanded(child: Chart(expenses: registeredExpenses)),
+              Expanded(child: mainContent)
+            ])
+          : Column(
+              children: [
+                Chart(expenses: registeredExpenses),
+                Expanded(child: mainContent),
+              ],
+            ),
     );
   }
 }
